@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Taalspiegels</title>
+<meta name="theme-color" content="#0f1a14">
+<style>
+  :root{
+    --bg:#0f1a14;
+    --card:#16241c;
+    --accent:#6fbf73;
+    --text:#eef5ef;
+    --muted:#9db3a3;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,Roboto,Segoe UI,sans-serif;
+    -webkit-tap-highlight-color:transparent;
+  }
+  header{
+    padding:28px 20px 10px;
+    text-align:center;
+  }
+  .backlink{
+    display:inline-block;
+    font-size:12px;
+    color:var(--muted);
+    text-decoration:none;
+    border:1px solid #22352a;
+    border-radius:20px;
+    padding:5px 12px;
+    margin-bottom:14px;
+  }
+  header h1{
+    margin:0;
+    font-size:26px;
+    letter-spacing:1px;
+  }
+  header p{
+    margin:6px 0 0;
+    color:var(--muted);
+    font-size:14px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    padding:0 20px;
+    max-width:520px;
+    margin:20px auto 0;
+  }
+  .tile{
+    background:var(--card);
+    border:1px solid #22352a;
+    border-radius:18px;
+    padding:20px 12px;
+    text-align:center;
+    text-decoration:none;
+    color:var(--text);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    min-height:104px;
+    justify-content:center;
+    transition:transform .1s ease, background .15s ease;
+  }
+  .tile:active{
+    transform:scale(0.96);
+    background:#1c2e22;
+  }
+  .tile .icon{ font-size:30px; }
+  .tile .label{ font-size:14px; font-weight:600; line-height:1.2; }
+  .tile .sub{ font-size:10.5px; color:var(--muted); line-height:1.2; }
+  footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:11px;
+    padding:30px 20px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="backlink" href="https://zaino.vercel.app/">← Terug naar Zaino</a>
+  <h1>🎒🗣️ Taalspiegels</h1>
+  <p>Alle taal-oefenspiegels samen &middot; Tutti gli specchi linguistici insieme</p>
+</header>
+
+<div class="grid">
+  <a class="tile" target="_blank" href="https://rodionrask.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Catalaans, catalano</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+  <a class="tile" target="_blank" href="https://spechio-espanol.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Spaans, spagnolo</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+  <a class="tile" target="_blank" href="https://specchio-magico-shadowing-kdv7.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Italiaans, Italiano</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+  <a class="tile" target="_blank" href="https://zauberspiegel.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Duits, Tedesco</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+  <a class="tile" target="_blank" href="https://magic-mirror-two-tawny.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Engels, Inglese</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+  <a class="tile" target="_blank" href="https://de-taal-toverspiegel.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Nederlands, Olandese</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+  <a class="tile" target="_blank" href="https://specchio-francais.vercel.app/">
+    <div class="icon">🪞🗣️</div>
+    <div class="label">Frans, Francese</div>
+    <div class="sub">Taalspiegel, specchio linguistico</div>
+  </a>
+</div>
+
+<footer>Jan den Hollander &middot; vrij en niet-commercieel</footer>
+
+</body>
+</html>
