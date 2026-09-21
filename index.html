@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Taalspiegels</title>
+<meta name="description" content="Alle Taalspiegels samen · Tutti gli specchi linguistici insieme">
+<meta name="author" content="Jan den Hollander">
 <meta name="theme-color" content="#0f1a14">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
   :root{
     --bg:#0f1a14;
@@ -80,8 +86,36 @@
     text-align:center;
     color:var(--muted);
     font-size:11px;
-    padding:30px 20px;
+    padding:30px 20px 36px;
   }
+  footer a{ color:var(--muted); }
+  .installbtn{
+    display:none;
+    margin:14px auto 0;
+    background:transparent;
+    color:var(--accent);
+    border:1px solid var(--accent);
+    border-radius:20px;
+    padding:7px 16px;
+    font-size:13px;
+    font-family:inherit;
+  }
+  .rate{
+    display:flex; align-items:center; justify-content:center;
+    gap:4px; margin-bottom:12px; min-height:40px;
+  }
+  .rate .q{ margin-right:6px; }
+  .rate button.dot{
+    width:40px; height:40px; padding:0; border:0; background:transparent;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .rate button.dot::before{
+    content:""; width:16px; height:16px; border-radius:50%;
+    background:var(--c); opacity:.75; transition:transform .1s ease, opacity .15s ease;
+  }
+  .rate button.dot:active::before{ transform:scale(1.35); opacity:1; }
+  .rate .g{ --c:#6fbf73; } .rate .o{ --c:#e6a94a; } .rate .r{ --c:#d9645a; }
+  .copy{ line-height:1.6; }
 </style>
 </head>
 <body>
@@ -90,6 +124,7 @@
   <a class="backlink" href="https://zaino-dashboard-3te6.vercel.app/">← Terug naar Zaino</a>
   <h1>🎒🗣️ Taalspiegels</h1>
   <p>Alle taal-oefenspiegels samen &middot; Tutti gli specchi linguistici insieme</p>
+  <button class="installbtn" id="installBtn" type="button">📲 Installeer · Installa</button>
 </header>
 
 <div class="grid">
@@ -130,7 +165,99 @@
   </a>
 </div>
 
-<footer>Jan den Hollander &middot; vrij en niet-commercieel</footer>
+<footer>
+  <div class="rate" id="rate">
+    <span class="q">Bevalt het? &middot; Ti piace?</span>
+    <button class="dot g" data-r="groen" type="button" aria-label="Goed · Bene"></button>
+    <button class="dot o" data-r="oranje" type="button" aria-label="Matig · Così così"></button>
+    <button class="dot r" data-r="rood" type="button" aria-label="Slecht · Male"></button>
+  </div>
+  <div class="copy">
+    &copy; 2026 Jan den Hollander &middot;
+    <a href="mailto:jandenhollander@duck.com">jandenhollander@duck.com</a><br>
+    vrij en niet-commercieel &middot; libero e non commerciale
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  // ===== Instellingen =====
+  var WEB3FORMS_KEY = "PLAK_HIER_JE_WEB3FORMS_KEY";   // dezelfde key als in de andere apps
+  var APP_NAAM = "Taalspiegels";
+
+  // ===== Eigenaar uitsluiten (open eenmalig ?owner=1 op elk eigen apparaat; ?owner=0 zet het weer uit) =====
+  var isOwner = false;
+  try{
+    var q = new URLSearchParams(location.search);
+    if(q.get("owner") === "1") localStorage.setItem("ts_owner","1");
+    if(q.get("owner") === "0") localStorage.removeItem("ts_owner");
+    isOwner = localStorage.getItem("ts_owner") === "1";
+  }catch(e){}
+
+  // ===== Analytics (Vercel Web Analytics, cookieloos) — niet voor de eigenaar =====
+  if(!isOwner){
+    window.va = window.va || function(){ (window.vaq = window.vaq || []).push(arguments); };
+    var s = document.createElement("script");
+    s.defer = true;
+    s.src = "/_vercel/insights/script.js";
+    document.head.appendChild(s);
+  }
+
+  // ===== Waardering (verkeerslicht-bolletjes) =====
+  var rate = document.getElementById("rate");
+  var alGedaan = false;
+  try{ alGedaan = !!localStorage.getItem("ts_rated"); }catch(e){}
+
+  function bedankt(){
+    rate.innerHTML = '<span class="q">Grazie! &middot; Bedankt!</span>';
+  }
+  if(alGedaan) bedankt();
+
+  rate.addEventListener("click", function(ev){
+    var b = ev.target.closest("button.dot");
+    if(!b) return;
+    var waarde = b.getAttribute("data-r");
+    bedankt();
+    if(isOwner || WEB3FORMS_KEY.indexOf("PLAK_HIER") === 0) return;
+    try{ localStorage.setItem("ts_rated", waarde); }catch(e){}
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {"Content-Type":"application/json", "Accept":"application/json"},
+      body: JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        subject: "Waardering",
+        from_name: APP_NAAM,
+        app: APP_NAAM,
+        waardering: waarde,
+        botcheck: ""
+      })
+    }).catch(function(){});
+  });
+
+  // ===== Installeren (PWA) =====
+  var prompt_ev = null, btn = document.getElementById("installBtn");
+  var standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault();
+    prompt_ev = e;
+    if(!standalone) btn.style.display = "inline-block";
+  });
+  btn.addEventListener("click", function(){
+    if(!prompt_ev) return;
+    prompt_ev.prompt();
+    prompt_ev.userChoice.then(function(){ prompt_ev = null; btn.style.display = "none"; });
+  });
+  window.addEventListener("appinstalled", function(){ btn.style.display = "none"; });
+
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("/sw.js").catch(function(){});
+    });
+  }
+})();
+</script>
 
 </body>
 </html>
